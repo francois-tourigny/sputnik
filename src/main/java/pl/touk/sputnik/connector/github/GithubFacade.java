@@ -79,7 +79,7 @@ public class GithubFacade implements ConnectorFacade {
                 String commitMessage = commitJson.getJsonObject("commit").getString("message");
 
                 // Append each commit message to the StringBuilder
-                commitMessagesBuilder.append(commitMessage)
+                commitMessagesBuilder.append(commitMessage);
             }
         } catch (IOException ex) {
             log.error("Error fetching commits for pull request", ex);
