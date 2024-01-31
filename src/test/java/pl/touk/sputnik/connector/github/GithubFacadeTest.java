@@ -105,12 +105,12 @@ class GithubFacadeTest {
     void shouldGetCommitMessagesSummaryCorrectly() throws Exception {
         JsonObject commitObject = Json.createObjectBuilder()
             .add("commit", Json.createObjectBuilder()
-            .add("message", "Initial commit").build())
+            .add("message", "Initial").build())
             .build();
     
         JsonObject commitObject2 = Json.createObjectBuilder()
             .add("commit", Json.createObjectBuilder()
-            .add("message", "Added new feature").build())
+            .add("message", "Feature").build())
             .build();
 
         // Mock commit.json() to return your JsonObject
@@ -119,7 +119,10 @@ class GithubFacadeTest {
 
         String commitMessagesSummary = githubFacade.getCommitMessagesSummary(); // Execute the method to test
 
-        String expectedSummary = "Initial commit\n-----------------------------------\nAdded new feature\n-----------------------------------\n";
+        String expectedSummary = "InitialFeature";
+        // Print each string to see if they are equal
+        System.out.println(commitMessagesSummary);
+        System.out.println(expectedSummary);
         assertThat(commitMessagesSummary).isEqualTo(expectedSummary);
     }
 

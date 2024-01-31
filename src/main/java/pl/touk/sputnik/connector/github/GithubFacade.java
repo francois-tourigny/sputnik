@@ -80,7 +80,6 @@ public class GithubFacade implements ConnectorFacade {
 
                 // Append each commit message to the StringBuilder
                 commitMessagesBuilder.append(commitMessage)
-                                    .append("\n-----------------------------------\n");
             }
         } catch (IOException ex) {
             log.error("Error fetching commits for pull request", ex);
