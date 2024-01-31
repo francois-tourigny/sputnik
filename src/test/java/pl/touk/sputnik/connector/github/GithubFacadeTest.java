@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -124,6 +125,15 @@ class GithubFacadeTest {
         System.err.println("##### Expected: " + expectedSummary + " #####");
         System.err.println("##### Actual: " + commitMessagesSummary + " #####");
         assertThat(commitMessagesSummary).isEqualTo(expectedSummary);
+    }
+
+    @Test
+    void shouldHandleIOExceptionWhenFetchingCommitJson() throws Exception {
+        when(pull.commits()).thenReturn(pullCommits());
+        when(commit.json()).thenThrow(new IOException("Test IOException"));
+
+        Throwable thrown = catchThrowable(() -> githubFacade.getCommitMessagesSummary());
+        assertThat(thrown).isInstanceOf(IOException.class); // Expecting IOException to be thrown
     }
 
     private Iterable<Commit> pullCommits() {
