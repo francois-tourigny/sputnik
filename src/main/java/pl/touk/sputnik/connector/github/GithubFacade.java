@@ -4,6 +4,7 @@ import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Optional;
 import com.jcabi.github.Pull;
 import com.jcabi.github.Repo;
+import com.jcabi.github.Commit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -73,7 +74,7 @@ public class GithubFacade implements ConnectorFacade {
 
         try {
             // Fetching commits associated with the pull request
-            for (Repo.Commit commit : pull.commits().iterate()) {
+            for (Commit commit : pull.commits()) {
                 JsonObject commitJson = commit.json();
                 String commitMessage = commitJson.getJsonObject("commit").getString("message");
 
