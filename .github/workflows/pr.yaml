@@ -29,8 +29,16 @@ jobs:
                   echo "TODO" >> rapport.md
 
             - name: Create comment
+              id: create_comment
+              run: |
+                  comment_body=$(cat rapport.md)
+                  echo "::set-output name=comment_body::$comment_body"
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Post comment
               uses: peter-evans/create-or-update-comment@v4
               with:
                   issue-number: ${{ github.event.pull_request.number }}
-                  body: ${{ github.workspace }}/rapport.md
+                  body: ${{ steps.create_comment.outputs.comment_body }}
                   token: ${{ secrets.GITHUB_TOKEN }}
