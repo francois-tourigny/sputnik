@@ -114,7 +114,7 @@ class GithubFacadeTest {
             .build();
 
         // Mock commit.json() to return your JsonObject
-        when(pull.commits()).thenReturn(Arrays.asList(mock(Commit.class), mock(Commit.class)));
+        when(pull.commits()).thenReturn(new Array<>(mock(Commit.class), mock(Commit.class)));
         when(commit.json()).thenReturn(commitObject, commitObject2);
 
         String commitMessagesSummary = githubFacade.getCommitMessagesSummary(); // Execute the method to test
