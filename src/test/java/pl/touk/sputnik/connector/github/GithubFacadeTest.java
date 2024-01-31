@@ -103,7 +103,7 @@ class GithubFacadeTest {
 
     @Test
     void shouldGetCommitMessagesSummaryCorrectly() throws Exception {
-        when(pull.commits().iterate()).thenReturn(pullCommits()); // Mock the behavior to return a list of commits
+        when(pull.commits()).thenReturn(pullCommits());
         when(commit.json().getJsonObject("commit").getString("message")).thenReturn("Initial commit", "Added new feature"); // Mock the commit message for each commit
 
         String commitMessagesSummary = githubFacade.getCommitMessagesSummary(); // Execute the method to test
