@@ -23,7 +23,16 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
                   ./gradlew build jacocoTestReport
+                  echo "## Unit Test Coverage" > rapport.md
+                  echo "TODO" >> rapport.md
+                  echo "## Code Coverage" >> rapport.md
+                  echo "TODO" >> rapport.md
 
-                  echo "## Unit Test Coverage" > rapport.md echo "TODO" >> rapport.md
-
-                  echo "## Code Coverage" >> rapport.md echo "TODO" >> rapport.md
+            - name: Create comment
+              uses: peter-evans/create-or-update-comment@v4
+              with:
+                  issue-number: ${{ github.event.pull_request.number }}
+                  body: |
+                      # Rapport
+                      [Rapport](rapport.md)
+                  token: ${{ secrets.GITHUB_TOKEN }}
