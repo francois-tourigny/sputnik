@@ -101,6 +101,17 @@ class GithubFacadeTest {
         verify(statuses).create(any(Statuses.StatusCreate.class));
     }
 
+    @Test
+    void shouldGetCommitMessagesSummaryCorrectly() throws Exception {
+        when(pull.commits().iterate()).thenReturn(pullCommits()); // Mock the behavior to return a list of commits
+        when(commit.json().getJsonObject("commit").getString("message")).thenReturn("Initial commit", "Added new feature"); // Mock the commit message for each commit
+
+        String commitMessagesSummary = githubFacade.getCommitMessagesSummary(); // Execute the method to test
+
+        String expectedSummary = "Initial commit\n-----------------------------------\nAdded new feature\n-----------------------------------\n";
+        assertThat(commitMessagesSummary).isEqualTo(expectedSummary);
+    }
+
     private Iterable<Commit> pullCommits() {
         return new Array<>(commit);
     }

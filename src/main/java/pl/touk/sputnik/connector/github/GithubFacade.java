@@ -66,6 +66,28 @@ public class GithubFacade implements ConnectorFacade {
         new Status(getPull(), review, issueId).update();
     }
 
+    @NotNull
+    public String getCommitMessagesSummary() {
+        Pull pull = getPull();
+        StringBuilder commitMessagesBuilder = new StringBuilder();
+
+        try {
+            // Fetching commits associated with the pull request
+            for (Repo.Commit commit : pull.commits().iterate()) {
+                JsonObject commitJson = commit.json();
+                String commitMessage = commitJson.getJsonObject("commit").getString("message");
+
+                // Append each commit message to the StringBuilder
+                commitMessagesBuilder.append(commitMessage)
+                                    .append("\n-----------------------------------\n");
+            }
+        } catch (IOException ex) {
+            log.error("Error fetching commits for pull request", ex);
+        }
+        
+        return commitMessagesBuilder.toString();
+    }
+
     private Pull getPull() {
         return repo.pulls().get(patchset.getPullRequestId());
     }
