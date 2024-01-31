@@ -103,8 +103,19 @@ class GithubFacadeTest {
 
     @Test
     void shouldGetCommitMessagesSummaryCorrectly() throws Exception {
+        JsonObject commitObject = Json.createObjectBuilder()
+            .add("commit", Json.createObjectBuilder()
+            .add("message", "Initial commit").build())
+            .build();
+    
+        JsonObject commitObject2 = Json.createObjectBuilder()
+            .add("commit", Json.createObjectBuilder()
+            .add("message", "Added new feature").build())
+            .build();
+
+        // Mock commit.json() to return your JsonObject
         when(pull.commits()).thenReturn(pullCommits());
-        when(commit.json().getJsonObject("commit").getString("message")).thenReturn("Initial commit", "Added new feature"); // Mock the commit message for each commit
+        when(commit.json()).thenReturn(commitObject, commitObject2);
 
         String commitMessagesSummary = githubFacade.getCommitMessagesSummary(); // Execute the method to test
 
