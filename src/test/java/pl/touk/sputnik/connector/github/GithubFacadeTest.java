@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -118,7 +117,7 @@ class GithubFacadeTest {
         when(pull.commits()).thenReturn(new Array<>(commit, commit));
         when(commit.json()).thenReturn(commitObject, commitObject2);
 
-        String commitMessagesSummary = githubFacade.getCommitMessagesSummary(); // Execute the method to test
+        String commitMessagesSummary = githubFacade.getCommitMessagesSummary();
 
         String expectedSummary = "InitialFeature";
         // Print each string to see if they are equal with a ##### header in ONE line
@@ -132,8 +131,8 @@ class GithubFacadeTest {
         when(pull.commits()).thenReturn(pullCommits());
         when(commit.json()).thenThrow(new IOException("Test IOException"));
 
-        Throwable thrown = catchThrowable(() -> githubFacade.getCommitMessagesSummary());
-        assertThat(thrown).isInstanceOf(IOException.class); // Expecting IOException to be thrown
+        String commitMessagesSummary = githubFacade.getCommitMessagesSummary();
+        assertThat(commitMessagesSummary).isEmpty(); // 
     }
 
     private Iterable<Commit> pullCommits() {
