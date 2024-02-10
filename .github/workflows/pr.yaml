@@ -21,24 +21,23 @@ jobs:
             - name: Build project
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: |
+              run: >
                   ./gradlew build jacocoTestReport
-                  echo "## Unit Test Coverage" > rapport.md
-                  echo "TODO" >> rapport.md
-                  echo "## Code Coverage" >> rapport.md
-                  echo "TODO" >> rapport.md
 
-            - name: Create comment
-              id: create_comment
-              run: |
-                  comment_body=$(cat rapport.md | awk '{printf "%s\\n", $0}')
-                  echo "::set-output name=comment_body::$comment_body"
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-            - name: Post comment
-              uses: peter-evans/create-or-update-comment@v4
+            - name: Add coverage to PR comment
+              id: jacoco
+              uses: madrapps/jacoco-report@v1.6.1
               with:
-                  issue-number: ${{ github.event.pull_request.number }}
-                  body: ${{ steps.create_comment.outputs.comment_body }}
+                  paths: |
+                      ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
                   token: ${{ secrets.GITHUB_TOKEN }}
+                  min-coverage-overall: 0
+                  min-coverage-changed-files: 0
+
+            - name: Report JUnit Tests
+              uses: mikepenz/action-junit-report@v2
+              if: always() # Run this step even if previous steps failed
+              with:
+                  report_paths: 'build/test-results/test/**/*.xml'
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  check_name: 'JUnit Test Results'
