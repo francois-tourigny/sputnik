@@ -119,10 +119,7 @@ class GithubFacadeTest {
 
         String commitMessagesSummary = githubFacade.getCommitMessagesSummary();
 
-        String expectedSummary = "InitialFeature";
-        // Print each string to see if they are equal with a ##### header in ONE line
-        System.err.println("##### Expected: " + expectedSummary + " #####");
-        System.err.println("##### Actual: " + commitMessagesSummary + " #####");
+        String expectedSummary = "Initial Feature";
         assertThat(commitMessagesSummary).isEqualTo(expectedSummary);
     }
 
